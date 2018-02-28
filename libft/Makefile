@@ -1,4 +1,4 @@
-NAME = ft_ls
+NAME = libft.a
 LIBFT = ./libft/libft.a
 SRCDIR = ./srcs/
 LIBDIR = ./libft/
@@ -20,8 +20,7 @@ $(LIBFT):
 	@make -C $(LIBDIR)
 
 $(NAME): $(LIBFT) $(OBJ)
-	@gcc -o $(NAME) $(OBJ) $(LIBFT)
-	@echo "Butterhorn!"
+	@ar rcs $(NAME) $(OBJ) $(LIB)
 
 clean:
 	@rm -rf $(OBJDIR)
