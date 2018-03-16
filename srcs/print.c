@@ -6,7 +6,7 @@
 /*   By: nwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/20 16:58:18 by nwang             #+#    #+#             */
-/*   Updated: 2018/03/16 00:53:32 by nwang            ###   ########.fr       */
+/*   Updated: 2018/03/16 14:43:21 by nwang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	invalid_print(t_tree *node)
 		invalid_print(node->right);
 }
 
-void	l_print(t_tree *node)
+void	l_print(t_flags *fl, t_tree *node)
 {
 	permission(node);
 	ft_printf("%d ", node->st->p_stat.st_nlink);
@@ -31,7 +31,13 @@ void	l_print(t_tree *node)
 	ft_printf("%s ", node->st->grp.gr_name);
 	ft_printf("%d ", node->st->p_stat.st_size);
 	print_date(node->st->p_stat.st_mtime);
-	ft_printf("%s\n", node->name);
+	if (fl->big_g && S_ISDIR(node->st->p_stat.st_mode))
+		ft_printf(C_CYAN "%s\n"C_RESET, node->name);
+	else if (fl->big_g && S_ISREG(node->st->p_stat.st_mode)
+			&& !S_ISDIR(node->st->p_stat.st_mode))
+		ft_printf(C_RED "%s\n"C_RESET, node->name);
+	else
+		ft_printf("%s\n", node->name);
 }
 
 void	print_left(t_flags *fl, t_tree *node)
@@ -45,7 +51,12 @@ void	print_left(t_flags *fl, t_tree *node)
 	if (node->st)
 	{
 		if (fl->l)
-			l_print(node);
+			l_print(fl, node);
+		else if (fl->big_g && S_ISDIR(node->st->p_stat.st_mode))
+			ft_printf(C_CYAN "%s\n"C_RESET, node->name);
+		else if (fl->big_g && S_ISREG(node->st->p_stat.st_mode)
+				&& !S_ISDIR(node->st->p_stat.st_mode))
+			ft_printf(C_RED "%s\n"C_RESET, node->name);
 		else
 			ft_putendl(node->name);
 	}
@@ -69,7 +80,12 @@ void	print_right(t_flags *fl, t_tree *node)
 	if (node->st)
 	{
 		if (fl->l)
-			l_print(node);
+			l_print(fl, node);
+		else if (fl->big_g && S_ISDIR(node->st->p_stat.st_mode))
+			ft_printf(C_CYAN "%s\n"C_RESET, node->name);
+		else if (fl->big_g && S_ISREG(node->st->p_stat.st_mode)
+				&& !S_ISDIR(node->st->p_stat.st_mode))
+			ft_printf(C_RED "%s\n"C_RESET, node->name);
 		else
 			ft_putendl(node->name);
 	}

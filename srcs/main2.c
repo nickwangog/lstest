@@ -6,7 +6,7 @@
 /*   By: nwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/06 21:30:14 by nwang             #+#    #+#             */
-/*   Updated: 2018/03/16 00:09:01 by nwang            ###   ########.fr       */
+/*   Updated: 2018/03/16 12:36:07 by nwang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_flags			*set_flags(int argc, char **argv, t_flags *fl, int x)
 void			ft_ls(t_flags *fl)
 {
 	invalid_print(fl->invalid_dir);
-	if (fl->invalid_dir || (fl->valid_dir && 
+	if (fl->invalid_dir || (fl->valid_dir &&
 				(fl->valid_dir->left || fl->valid_dir->right)))
 		fl->p_dir = 1;
 	if (fl->valid_dir || fl->invalid_dir)
