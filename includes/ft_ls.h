@@ -10,56 +10,66 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/xattr.h>
 #include <pwd.h>
 #include <grp.h>
 #include <uuid/uuid.h>
 #include <errno.h>
 #include "../libft/includes/ft_printf.h"
 
-struct node 
-{
-    int data;
-    struct node *left;
-    struct node *right;
-};
-
-typedef struct		s_flags
-{
-	int l;
-	int R;
-	int a;
-	int r;
-	int t;
-	int	g;
-}					t_flags;
-
-/*typedef struct		s_size
-{
-	int				total;
-	int				size;
-	int				groupspace;
-	int				userspace;
-	int				linkspace;
-	int				min;
-	int				maj;
-}					t_size;*/
+#define N_SEC (ls->st->p_stat.st_mtimespec.tv_sec)
+#define L_SEC (node->st->p_stat.st_mtimespec.tv_sec)
+#define N_NSEC (ls->st->p_stat.st_mtimespec.tv_nsec)
+#define L_NSEC (node->st->p_stat.st_mtimespec.tv_nsec)
 
 typedef struct		s_info
 {
-	char			*name;
-//	char			*path;
-	time_t			date;
-	mode_t			st_mode;
-	nlink_t			st_nlink;
-	uid_t			st_uid;
-	gid_t			st_gid;
-	off_t			st_size;
-	quad_t			st_blocks;
-	dev_t			st_rdev;
-	struct s_elem	*next;
+	struct stat		p_stat;
+	struct passwd	pwd;
+	struct group	grp;
 }					t_info;
 
-void	file_info(struct dirent *dir, struct stat *buf, t_flags *fl);
-void	print_finfo(t_info *info, t_flags *fl);
+typedef struct		s_tree
+{
+	char			*name;
+	char			*path;
+    t_info			*st;
+    struct s_tree	*left;
+    struct s_tree	*right;
+}					t_tree;
+
+typedef struct		s_flags
+{
+	int 			l;
+	int				big_r;
+	int				a;
+	int				r;
+	int				t;
+	int				g;
+	int				big_g;
+	int				big_s;
+	int				d_flag;
+	int				b_flag;
+	int				p_dir;
+	int				nline;
+	int				inv_flag;
+	int				blocks;
+	t_tree			*valid_dir;
+	t_tree			*invalid_dir;
+}					t_flags;
+
+void				l_print(t_tree *node);
+void				invalid_print(t_tree *node);
+void				permission(t_tree *node);
+void				run_ls(t_flags *fl, char *d_name);
+void				target_dir(t_flags *fl, t_tree *node);
+t_tree				*ins_node(t_flags *fl, t_tree *node, t_tree *ls);
+t_tree				*new_node(char *c_dir, char *s);
+int					clear_ls(t_flags *fl);
+void				permission(t_tree *node);
+void				clear_tree(t_tree *root);
+void				recursive_ls(t_flags *fl, t_tree *root, char *c_dir);
+void				print_dir(t_flags *fl, t_tree *root, char *c_dir);
+void				print_date(time_t date);
 
 #endif
